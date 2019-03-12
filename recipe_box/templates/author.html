@@ -9,7 +9,7 @@
   <body>
     <ul>
       {% for recipe in data %}
-      <li>{{ data }}</li>
+      <li><a href="/recipe/{{recipe.id}}">{{ recipe.title }}</a</li>
 
       {% endfor %}
     </ul>

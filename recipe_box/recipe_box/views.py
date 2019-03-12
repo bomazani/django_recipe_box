@@ -10,5 +10,5 @@ def recipe(request, r_id):
     return render(request, 'recipe.html', {'data':recipe_id})
 
 def author(request, a_id):
-    recipes = Recipe.objects.get(author=a_id)
-    return render(request, 'author.html', {'data':recipes})
+    author_recipes = Recipe.objects.filter(author=a_id)
+    return render(request, 'author.html', {'data':author_recipes})
