@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from recipe_box.models import Author, Recipe
-from recipe_box.views import index, recipe, author
+from recipe_box.views import index, recipe, author, recipeadd, authoradd
 
 
 admin.site.register(Author)
@@ -28,4 +28,6 @@ urlpatterns = [
     path('', index),
     path('recipe/<int:r_id>', recipe),
     path('author/<int:a_id>', author),
+    path('recipeadd/', recipeadd),
+    path('authoradd/', authoradd)
 ]
