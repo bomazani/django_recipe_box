@@ -16,11 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from recipe_box.models import *
+from recipe_box.models import Author, Recipe
+from recipe_box.views import index, recipe, author, recipeadd, authoradd
+
 
 admin.site.register(Author)
 admin.site.register(Recipe)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index),
+    path('recipe/<int:r_id>', recipe),
+    path('author/<int:a_id>', author),
+    path('recipeadd/', recipeadd),
+    path('authoradd/', authoradd)
 ]

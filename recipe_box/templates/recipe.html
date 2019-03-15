@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Recipe</title>
+  </head>
+  <body>
+    <ul>
+      <li>
+        <b>{{ data.title }}, by </b>
+        <a href="/author/{{ data.author.id }}">{{ data.author }}</a>
+      </li>
+      <ul>
+        <li>{{ data.description }}</li>
+        <li>Time to cook: {{ data.time }}</li>
+        <li>Preparations: {{ data.instructions }}</li>
+      </ul>
+    </ul>
+  </body>
+</html>
