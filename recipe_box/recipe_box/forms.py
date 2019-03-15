@@ -1,5 +1,6 @@
 from django import forms
 from recipe_box.models import Recipe, Author, User
+from django.contrib.auth import logout
 
 class RecipeAddForm(forms.Form):
     title = forms.CharField(max_length=50)
@@ -8,19 +9,17 @@ class RecipeAddForm(forms.Form):
     description = forms.CharField(max_length=50)
     time = forms.CharField(max_length=50)
 
-    # title = models.CharField(max_length=50)
-    # author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    # description = models.CharField(max_length=50)
-    # time = models.CharField(max_length=50)
-    # instructions = models.TextField()
-
 class AuthorAddForm(forms.Form):
     bio = forms.CharField(widget=forms.Textarea)
     name = forms.CharField(max_length=50)
     username = forms.CharField(max_length=50)
-    # author = forms.ModelChoiceField(queryset=User.objects.all())
 
+class SignupForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    bio = forms.CharField(widget=forms.Textarea)
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput())
 
-    # bio = models.TextField()
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # name = models.CharField(max_length=50)
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput())
