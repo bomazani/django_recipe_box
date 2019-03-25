@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse
 from recipe_box.models import Author, Recipe, User
 from recipe_box.forms import RecipeAddForm, AuthorAddForm
 from recipe_box.forms import SignupForm, LoginForm
+from recipe_box.forms import AddFavoriteForm, RemoveFavoriteForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -110,4 +111,52 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
-    
+
+def add_favorite_view(request, recipe_id):
+    # recipes = Recipe.objects.all()
+    html = 'favorite.html'
+    form = None
+
+    if request.method == "POST":
+        form = AddFavoriteForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            # user = User.objects.create_user(
+            #     data['username'], data['password'])
+            # login(request, user)
+            # Author.objects.create(
+            #     bio=data['bio'],
+            #     user=user,
+            #     name=data['name']
+            # )
+            return HttpResponseRedirect(reverse('homepage'))
+    else:
+        form = AddFavoriteForm()
+
+    return render(request, html, {'form': form})
+
+def remove_favorite_view(request):
+    recipes = Recipe.objects.all()
+    html = 'favorite.html'
+    form = None
+
+    if request.method == "POST":
+        form = RemoveFavoriteForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            # user = User.objects.create_user(
+            #     data['username'], data['password'])
+            # login(request, user)
+            # Author.objects.create(
+            #     bio=data['bio'],
+            #     user=user,
+            #     name=data['name']
+            # )
+            return HttpResponseRedirect(reverse('homepage'))
+    else:
+        form = RemoveFavoriteForm()
+
+    return render(request, html, {'form': form})
+     
