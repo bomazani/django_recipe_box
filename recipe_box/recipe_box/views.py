@@ -1,12 +1,13 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponseRedirect, reverse, redirect, get_object_or_404
 from recipe_box.models import Author, Recipe, User
-from recipe_box.forms import RecipeAddForm, AuthorAddForm
+from recipe_box.forms import RecipeAddForm, AuthorAddForm, RecipeEditForm
 from recipe_box.forms import SignupForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-
+from django.urls import reverse
+# from django.contrib.auth.forms import RecipeEditForm
 
 def index(request):
     recipes = Recipe.objects.all()
@@ -39,7 +40,7 @@ def recipeadd(request):
             )
             return render(request, 'thanks.html')
     else:
-        form = RecipeAddForm
+        form = RecipeAddForm()
 
     return render(request, html, {'form': form})
 
@@ -111,6 +112,22 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def edit_view(request):
-    pass
-    
+def edit_view(request, r_id):
+    r_instance = get_object_or_404(Recipe, id=r_id)
+    if request.method == 'POST':
+        form = RecipeEditForm(request.POST, instance=r_instance)
+
+        if form.is_valid():
+            form.save()
+            return redirect('recipe/<int:r_id>')
+    else:
+        initial_form_data = {
+                            'title': r_instance.title, 
+                            'author': r_instance.author, 
+                            'instructions': r_instance.instructions, 
+                            'description': r_instance.description, 
+                            'time': r_instance.time
+                            }
+        form = RecipeEditForm(initial=initial_form_data)
+
+    return render(request, 'recipeedit.html', {'form': form})

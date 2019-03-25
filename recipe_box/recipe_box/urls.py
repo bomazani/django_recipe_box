@@ -18,7 +18,7 @@ from django.urls import path
 
 from recipe_box.models import Author, Recipe
 from recipe_box.views import index, recipe, author, recipeadd, authoradd
-from recipe_box.views import signup_view, login_view, logout_view
+from recipe_box.views import signup_view, login_view, logout_view, edit_view
 
 
 admin.site.register(Author)
@@ -30,6 +30,7 @@ urlpatterns = [
     path('recipe/<int:r_id>', recipe),
     path('author/<int:a_id>', author),
     path('recipeadd/', recipeadd),
+    path('recipe/<int:r_id>/edit', edit_view),
     path('authoradd/', authoradd),
     path('signup/', signup_view),
     path('login/', login_view),
