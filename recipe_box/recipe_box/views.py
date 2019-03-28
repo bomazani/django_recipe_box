@@ -115,11 +115,16 @@ def logout_view(request):
 def edit_view(request, r_id):
     r_instance = get_object_or_404(Recipe, id=r_id)
     if request.method == 'POST':
-        form = RecipeEditForm(request.POST, instance=r_instance)
+        form = RecipeEditForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('recipe/<int:r_id>')
+            r_instance.title = form.cleaned_data['title'] #form.title
+            r_instance.instructions = form.cleaned_data['instructions']
+            r_instance.description = form.cleaned_data['description']
+            r_instance.time = form.cleaned_data['time']
+
+            r_instance.save()
+            return redirect('/recipe/' + str(r_id))
     else:
         initial_form_data = {
                             'title': r_instance.title, 
