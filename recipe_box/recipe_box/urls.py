@@ -28,6 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='homepage'),
     path('recipe/<int:r_id>', recipe),
+    path('recipe/favorite/<int:r_id>', recipe_favorite),
+    path('recipe/remove_favorite/<int:r_id>', recipe_remove_favorite),
     path('author/<int:a_id>', author),
     path('recipeadd/', recipeadd),
     path('authoradd/', authoradd),

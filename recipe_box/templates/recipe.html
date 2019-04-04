@@ -9,14 +9,30 @@
   <body>
     <ul>
       <li>
-        <b>{{ data.title }}, by </b>
-        <a href="/author/{{ data.author.id }}">{{ data.author }}</a>
+        <b>{{ current_recipe.title }}, by </b>
+        <a href="/author/{{ current_recipe.author.id }}">{{ current_recipe.author }}</a>
       </li>
       <ul>
-        <li>{{ data.description }}</li>
-        <li>Time to cook: {{ data.time }}</li>
-        <li>Preparations: {{ data.instructions }}</li>
+        <li>{{ current_recipe.description }}</li>
+        <li>Time to cook: {{ current_recipe.time }}</li>
+        <li>Preparations: {{ current_recipe.instructions }}</li>
       </ul>
+      {% if current_user.is_authenticated %}
+        {% if unfavorite %}
+          <a href = "/recipe/remove_favorite/{{ r_id }}">
+            <button>
+              Remove Favorite
+            </button>
+          </a>
+        {% endif %}
+        {% if favorite %}
+          <a href = "/recipe/favorite/{{ r_id }}">
+            <button>
+              Favorite
+            </button>
+          </a>
+        {% endif %}
+      {% endif %}
     </ul>
   </body>
 </html>

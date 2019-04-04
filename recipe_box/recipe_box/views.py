@@ -3,6 +3,7 @@ from recipe_box.models import Author, Recipe, User
 from recipe_box.forms import RecipeAddForm, AuthorAddForm
 from recipe_box.forms import SignupForm, LoginForm
 from recipe_box.forms import AddFavoriteForm, RemoveFavoriteForm
+from recipe_box.helpers import add_favorite, remove_favorite
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -14,8 +15,18 @@ def index(request):
     return render(request, 'index.html', {'data':recipes})
 
 def recipe(request, r_id):
-    recipe_id = Recipe.objects.get(id=r_id)
-    return render(request, 'recipe.html', {'data':recipe_id})
+    # recipe_id = Recipe.objects.get(id=r_id)
+    current_user = request.user.all()
+    current_recipe = Recipe.objects.filter(id=r_id)
+    # *** need to determine whether to pass through favorite or unfavorite
+    # *** depending on whether the current recipe is or is not currently in "favorites"
+    data = {
+        'current_user': current_user,
+        'current_recipe': current_recipe,
+    }
+    
+    # return render(request, 'recipe.html', {'data':recipe_id})
+    return render(request, 'recipe.html', data)
 
 def author(request, a_id):
     author_recipes = Recipe.objects.filter(author=a_id)
@@ -113,50 +124,24 @@ def logout_view(request):
     return HttpResponseRedirect('/')
 
 def add_favorite_view(request, recipe_id):
-    # recipes = Recipe.objects.all()
-    html = 'favorite.html'
-    form = None
+    recipe = Recipe.objects.filter(id=recipe_id).first()
+    html = 'recipe.html'
+    add_favorite(request, recipe)
+    data = {
+        'current_user': request.user.author,
+        'current_recipe': recipe,
+        'unfavorite': True
+    }
+    return render(request, html, data)
 
-    if request.method == "POST":
-        form = AddFavoriteForm(request.POST)
-
-        if form.is_valid():
-            data = form.cleaned_data
-            # user = User.objects.create_user(
-            #     data['username'], data['password'])
-            # login(request, user)
-            # Author.objects.create(
-            #     bio=data['bio'],
-            #     user=user,
-            #     name=data['name']
-            # )
-            return HttpResponseRedirect(reverse('homepage'))
-    else:
-        form = AddFavoriteForm()
-
-    return render(request, html, {'form': form})
-
-def remove_favorite_view(request):
-    recipes = Recipe.objects.all()
-    html = 'favorite.html'
-    form = None
-
-    if request.method == "POST":
-        form = RemoveFavoriteForm(request.POST)
-
-        if form.is_valid():
-            data = form.cleaned_data
-            # user = User.objects.create_user(
-            #     data['username'], data['password'])
-            # login(request, user)
-            # Author.objects.create(
-            #     bio=data['bio'],
-            #     user=user,
-            #     name=data['name']
-            # )
-            return HttpResponseRedirect(reverse('homepage'))
-    else:
-        form = RemoveFavoriteForm()
-
-    return render(request, html, {'form': form})
+def remove_favorite_view(request, recipe_id):
+    recipes = Recipe.objects.filter(id=recipe_id).first()
+    html = 'recipe.html'
+    remove_favorite(request, recipe)
+    data = {
+        'current_user': request.user.author,
+        'current_recipe': recipe,
+        'favorite': True
+    }
+    return render(request, html, data)
      
