@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, redirect, ge
 from recipe_box.models import Author, Recipe, User
 from recipe_box.forms import RecipeAddForm, AuthorAddForm, RecipeEditForm
 from recipe_box.forms import SignupForm, LoginForm
-from recipe_box.forms import AddFavoriteForm, RemoveFavoriteForm
+# from recipe_box.forms import AddFavoriteForm, RemoveFavoriteForm
 from recipe_box.helpers import add_favorite, remove_favorite
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
