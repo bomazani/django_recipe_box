@@ -32,6 +32,7 @@ urlpatterns = [
     path('recipe/remove_favorite/<int:r_id>', remove_favorite_view),
     path('author/<int:a_id>', author),
     path('recipeadd/', recipeadd),
+    path('recipe/<int:r_id>/edit', edit_view),
     path('authoradd/', authoradd),
     path('signup/', signup_view),
     path('login/', login_view),
