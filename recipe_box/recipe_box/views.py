@@ -16,16 +16,28 @@ def index(request):
 
 def recipe(request, r_id):
     # recipe_id = Recipe.objects.get(id=r_id)
-    current_user = request.user.all()
-    current_recipe = Recipe.objects.filter(id=r_id)
+    recipe = Recipe.objects.filter(id=r_id).first()
+    current_user = request.user
+    current_recipe = Recipe.objects.get(id=r_id)
     # *** need to determine whether to pass through favorite or unfavorite
     # *** depending on whether the current recipe is or is not currently in "favorites"
+    current_favorites = request.user.author.favorites.all()
+    favorite = False
+    unfavorite = False
+    if recipe in current_favorites:
+        favorite = True
+        unfavorite = False
+    else:
+        favorite = False
+        unfavorite = True
     data = {
         'current_user': current_user,
         'current_recipe': current_recipe,
+        'current_favorites': current_favorites,
+        'favorite':favorite,
+        'unfavorite':unfavorite,
     }
     
-    # return render(request, 'recipe.html', {'data':recipe_id})
     return render(request, 'recipe.html', data)
 
 def author(request, a_id):
