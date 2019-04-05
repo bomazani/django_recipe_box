@@ -112,6 +112,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 def edit_view(request, r_id):
     r_instance = get_object_or_404(Recipe, id=r_id)
     if request.method == 'POST':
