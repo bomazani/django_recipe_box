@@ -27,7 +27,7 @@ admin.site.register(Recipe)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='homepage'),
-    path('recipe/<int:r_id>', recipe),
+    path('recipe/<int:r_id>', recipe, name="recipedetail"),
     path('recipe/favorite/<int:r_id>', add_favorite_view),
     path('recipe/remove_favorite/<int:r_id>', remove_favorite_view),
     path('author/<int:a_id>', author),

@@ -15,24 +15,23 @@ def index(request):
     return render(request, 'index.html', {'data':recipes})
 
 def recipe(request, r_id):
-    # recipe_id = Recipe.objects.get(id=r_id)
     recipe = Recipe.objects.filter(id=r_id).first()
     current_user = request.user
     current_recipe = Recipe.objects.get(id=r_id)
-    # *** need to determine whether to pass through favorite or unfavorite
-    # *** depending on whether the current recipe is or is not currently in "favorites"
-    current_favorites = request.user.author.favorites.all()
-    favorite = False
-    unfavorite = False
+    r_id = current_recipe.id
+    current_favorites = request.user.author.favorite.all()
+
     if recipe in current_favorites:
-        favorite = True
-        unfavorite = False
-    else:
         favorite = False
         unfavorite = True
+    else:
+        favorite = True
+        unfavorite = False
+
     data = {
         'current_user': current_user,
         'current_recipe': current_recipe,
+        'r_id': r_id,
         'current_favorites': current_favorites,
         'favorite':favorite,
         'unfavorite':unfavorite,
@@ -40,9 +39,11 @@ def recipe(request, r_id):
     
     return render(request, 'recipe.html', data)
 
+
 def author(request, a_id):
     author_recipes = Recipe.objects.filter(author=a_id)
     return render(request, 'author.html', {'data':author_recipes})
+
 
 @login_required()
 def recipeadd(request):
@@ -67,6 +68,7 @@ def recipeadd(request):
 
     return render(request, html, {'form': form})
 
+
 @staff_member_required()
 def authoradd(request):
     html = 'authoradd.html'
@@ -89,6 +91,7 @@ def authoradd(request):
         form = AuthorAddForm
 
     return render(request, html, {'form': form})
+
 
 def signup_view(request):
     html = 'signup.html'
@@ -135,25 +138,15 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def add_favorite_view(request, recipe_id):
-    recipe = Recipe.objects.filter(id=recipe_id).first()
+def add_favorite_view(request, r_id):
+    recipe = Recipe.objects.filter(id=r_id).first()
     html = 'recipe.html'
     add_favorite(request, recipe)
-    data = {
-        'current_user': request.user.author,
-        'current_recipe': recipe,
-        'unfavorite': True
-    }
-    return render(request, html, data)
+    return HttpResponseRedirect(reverse('recipedetail', kwargs={'r_id': r_id}))
 
-def remove_favorite_view(request, recipe_id):
-    recipes = Recipe.objects.filter(id=recipe_id).first()
+def remove_favorite_view(request, r_id):
+    recipe = Recipe.objects.filter(id=r_id).first()
     html = 'recipe.html'
     remove_favorite(request, recipe)
-    data = {
-        'current_user': request.user.author,
-        'current_recipe': recipe,
-        'favorite': True
-    }
-    return render(request, html, data)
+    return HttpResponseRedirect(reverse('recipedetail', kwargs={'r_id': r_id}))
      
