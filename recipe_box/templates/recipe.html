@@ -33,9 +33,16 @@
           </a>
         {% endif %}
       {% endif %}
-
-      <div>
       <br>
+      {% if match %}
+      <a href = "/recipe/{{ r_id }}/edit">
+        <button>
+          Edit Recipe
+        </button>
+      </a>
+      {% endif %}
+      <div>
+      <!-- <br>
         *******************
       </div>
       <div>
@@ -50,8 +57,11 @@
       <div>
         r_id = {{ r_id }}
       </div> 
+      <div>current_recipe.author = {{ current_recipe.author }}</div>
+      <div>current_recipe.time = {{ current_recipe.time }}</div>
+      <div>current_user_name = {{ current_user_name }}</div>
 
-  
+   -->
     </ul>
   </body>
 </html>

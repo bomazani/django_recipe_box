@@ -18,9 +18,15 @@ def index(request):
 def recipe(request, r_id):
     recipe = Recipe.objects.filter(id=r_id).first()
     current_user = request.user
+    current_user_name = request.user.author.name
     current_recipe = Recipe.objects.get(id=r_id)
     r_id = current_recipe.id
     current_favorites = request.user.author.favorite.all()
+
+    if str(current_user_name) == str(current_recipe.author):
+        match = True
+    else:
+        match = False
 
     if recipe in current_favorites:
         favorite = False
@@ -31,19 +37,34 @@ def recipe(request, r_id):
 
     data = {
         'current_user': current_user,
+        'current_user_name': current_user_name,
         'current_recipe': current_recipe,
         'r_id': r_id,
         'current_favorites': current_favorites,
-        'favorite':favorite,
-        'unfavorite':unfavorite,
+        'favorite': favorite,
+        'unfavorite': unfavorite,
+        'match': match,
     }
     
     return render(request, 'recipe.html', data)
 
 
 def author(request, a_id):
-    author_recipes = Recipe.objects.filter(author=a_id)
-    return render(request, 'author.html', {'data':author_recipes})
+
+    recipes = Recipe.objects.filter(author=a_id)
+    author = Author.objects.get(id=a_id)
+    selected_author = Author.objects.get(id=a_id)
+    current_user_favorites = request.user.author.favorite.all()
+    selected_author_favorites = selected_author.favorite.all()
+
+    context = {
+        'recipes':recipes,
+        'author':author,
+        # 'favorites':favorites,
+        'current_user_favorites':current_user_favorites,
+        'selected_author_favorites': selected_author_favorites
+    }
+    return render(request, 'author.html', context)
 
 
 @login_required()
@@ -153,6 +174,7 @@ def remove_favorite_view(request, r_id):
      
 def edit_view(request, r_id):
     r_instance = get_object_or_404(Recipe, id=r_id)
+    
     if request.method == 'POST':
         form = RecipeEditForm(request.POST)
 
