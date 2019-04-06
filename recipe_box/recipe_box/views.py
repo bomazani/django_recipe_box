@@ -18,33 +18,54 @@ def index(request):
 def recipe(request, r_id):
     recipe = Recipe.objects.filter(id=r_id).first()
     current_user = request.user
-    current_user_name = request.user.author.name
     current_recipe = Recipe.objects.get(id=r_id)
     r_id = current_recipe.id
-    current_favorites = request.user.author.favorite.all()
 
-    if str(current_user_name) == str(current_recipe.author):
-        match = True
+    if current_user.is_authenticated:
+        current_user_name = request.user.author.name
+        current_favorites = request.user.author.favorite.all()
+
+
+# If current user is anonymous, then match = False
+    if current_user.is_authenticated:
+        if recipe in current_favorites:
+            favorite = False
+            unfavorite = True
+        else:
+            favorite = True
+            unfavorite = False
+
+        if (str(current_user_name) == str(current_recipe.author)):
+            # OR if current_user is staff/admin
+            match = True
+        elif current_user.is_superuser:
+            match = True
+        else:
+            match = False
+        data = {
+            'current_user': current_user,
+            'current_user_name': current_user_name,
+            'current_recipe': current_recipe,
+            'r_id': r_id,
+            'current_favorites': current_favorites,
+            'favorite': favorite,
+            'unfavorite': unfavorite,
+            'match': match,
+        }
+
+
     else:
         match = False
-
-    if recipe in current_favorites:
-        favorite = False
-        unfavorite = True
-    else:
-        favorite = True
-        unfavorite = False
-
-    data = {
-        'current_user': current_user,
-        'current_user_name': current_user_name,
-        'current_recipe': current_recipe,
-        'r_id': r_id,
-        'current_favorites': current_favorites,
-        'favorite': favorite,
-        'unfavorite': unfavorite,
-        'match': match,
-    }
+        data = {
+            'current_user': current_user,
+            # 'current_user_name': current_user_name,
+            'current_recipe': current_recipe,
+            'r_id': r_id,
+            # 'current_favorites': current_favorites,
+            # 'favorite': favorite,
+            # 'unfavorite': unfavorite,
+            'match': match,
+        }
     
     return render(request, 'recipe.html', data)
 
