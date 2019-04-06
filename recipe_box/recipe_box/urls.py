@@ -20,7 +20,6 @@ from recipe_box.models import Author, Recipe
 from recipe_box.views import index, recipe, author, recipeadd, authoradd
 from recipe_box.views import signup_view, login_view, logout_view, add_favorite_view, remove_favorite_view, edit_view
 
-
 admin.site.register(Author)
 admin.site.register(Recipe)
 
