@@ -7,11 +7,21 @@
     <title>Author</title>
   </head>
   <body>
+    <H1>{{ author }}'s Profile Page</H1>
+    <br>
+    <h3>{{ author }}'s recipes:</h3>
     <ul>
-      {% for recipe in data %}
-      <li><a href="/recipe/{{recipe.id}}">{{ recipe.title }}</a</li>
+      {% for recipe in recipes %}
+      <li><a href="/recipe/{{recipe.id}}">{{ recipe.title }}</a></li>
 
       {% endfor %}
     </ul>
+    <br>
+    <h3>{{ author }}'s Favorite Recipes:</h3>
+    <div>
+      {% for favorite in selected_author_favorites %}
+      <li><a href="/recipe/{{favorite.id}}">{{ favorite }}</a></li>
+      {% endfor %}
+    </div>
   </body>
 </html>
